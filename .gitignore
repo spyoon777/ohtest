@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+# custom
+# Dataset
+dataset/
+
+# Thirdparty (except OpenHolo)
+#thirdparty/{somthing}
