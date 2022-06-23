@@ -22,8 +22,8 @@ set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/cmake_modules")
 # EXT Lib
 message ("############################################################")
 
-#set (REALSENSE_SDK_ROOT_DIR "${CMAKE_SOURCE_DIR}/thirdparty/Intel RealSense SDK 2.0")
-#message ("realsense sdk 2.0 dir: ${REALSENSE_SDK_ROOT_DIR}")
+set (OPENHOLO_ROOT_DIR "${CMAKE_SOURCE_DIR}/thirdparty/OpenHolo_v2.0")
+message ("openholo dir: ${OPENHOLO_ROOT_DIR}")
 
 #set (OPENCV3412_ROOT_DIR "${CMAKE_SOURCE_DIR}/thirdparty/opencv-3.4.12")
 #message ("opencv-3.4.12 dir: ${OPENCV3412_ROOT_DIR}")

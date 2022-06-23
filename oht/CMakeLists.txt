@@ -5,8 +5,10 @@ cmake_minimum_required (VERSION 3.18)
 
 project (oht VERSION ${ohtest_VERSION})
 
-# configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in"
-#                 "${CMAKE_CURRENT_SOURCE_DIR}/config.h" @ONLY)
+set (PROJ_PATH "${CMAKE_SOURCE_DIR}")
+
+configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/config/config.h.in"
+                "${CMAKE_CURRENT_SOURCE_DIR}/config/config.h" @ONLY)
 
 add_executable (${PROJECT_NAME})
 target_sources (${PROJECT_NAME}
@@ -17,17 +19,21 @@ PUBLIC
 target_include_directories (${PROJECT_NAME}
 PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${OPENHOLO_ROOT_DIR}/include"
 )
 
-#target_link_libraries (${PROJECT_NAME}
-#    "${REALSENSE_SDK_ROOT_DIR}/lib/x64/realsense2.lib"
-#)
-#target_link_libraries (${PROJECT_NAME} optimized
-#    ${OPENCV3412_ROOT_DIR}/x64/vc15/lib/opencv*3412.lib
-#)
-#target_link_libraries (${PROJECT_NAME} debug
-#    ${OPENCV3412_ROOT_DIR}/x64/vc15/lib/opencv*3412d.lib
-#)
+target_link_libraries (${PROJECT_NAME}
+    ${OPENHOLO_ROOT_DIR}/lib/libfftw*.lib
+)
+target_link_libraries (${PROJECT_NAME} optimized
+    "${OPENHOLO_ROOT_DIR}/lib/openholo.lib"
+    "${OPENHOLO_ROOT_DIR}/lib/ophgen.lib"
+    "${OPENHOLO_ROOT_DIR}/lib/ophrec.lib"
+    "${OPENHOLO_ROOT_DIR}/lib/ophsig.lib"
+)
+target_link_libraries (${PROJECT_NAME} debug
+    ${OPENHOLO_ROOT_DIR}/lib/*_d.lib
+)
 
 if (WIN32)
     target_compile_definitions (${PROJECT_NAME}
@@ -38,10 +44,19 @@ if (WIN32)
 endif()
 
 # Copy dll
+file (GLOB OPENHOLO_DLLS "${OPENHOLO_ROOT_DIR}/dll/*.dll")
+list (APPEND ${PROJECT_NAME}_LINK_DLLS ${OPENHOLO_DLLS})
+
+foreach(dll ${${PROJECT_NAME}_LINK_DLLS})
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${dll} "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+    )
+endforeach()
+
 add_custom_command(
     TARGET ${PROJECT_NAME} POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${REALSENSE_SDK_ROOT_DIR}/bin/x64/realsense2.dll" "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
-    COMMAND ${CMAKE_COMMAND} -E echo "Copy .dll to ${PROJECT_NAME} exe directory"
+    COMMAND ${CMAKE_COMMAND} -E echo "Copy openholo.dll to ${PROJECT_NAME} exe directory"
 )
 
 # Define install patterns (library project need install target)

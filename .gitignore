@@ -2,5 +2,11 @@
 # Dataset
 dataset/
 
+# CMAKE build dir
+[bB]uild/
+
 # Thirdparty (except OpenHolo)
 #thirdparty/{somthing}
+
+# Generated config.h
+oht/config/config.h

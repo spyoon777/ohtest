@@ -1,0 +1,9 @@
+// Copyright(c) 2022 KOREA ELECTRONICS TECHNOLOGY INSTITUTE(KETI), All Rights Reserved.
+// Author: spyoon777
+
+#ifndef OHT_CONFIG_CONFIG_H_
+#define OHT_CONFIG_CONFIG_H_
+
+static constexpr char* PROJ_PATH = "@PROJ_PATH@";
+
+#endif  // OHT_CONFIG_CONFIG_H_
