@@ -6,26 +6,37 @@
 #include <filesystem>
 
 #include "ophPointCloud.h"
+#include "ophDepthMap.h"
 
 #include "config/config.h"
 
-namespace fs = std::filesystem;
+namespace fs = std::experimental::filesystem;
 
 int main() {
+    //// Point Cloud Example
+
     // Create ophPointCloud instance
     ophPointCloud* Hologram = new ophPointCloud();
 
-    // Read Config Parameters for Point Cloud CGH
     std::string proj_dir = PROJ_PATH;
-    std::string conf_file = proj_dir + "/oht/config/PointCloud.xml";
-    Hologram->readConfig(conf_file.c_str());
+    std::string conf_file = proj_dir + "/oht/config/Dice_PointCloud.xml";
+
+    // Read Config Parameters for Point Cloud CGH
+    if (!Hologram->readConfig(conf_file.c_str())) {
+        std::cerr << "Config file load failed" << std::endl;
+        exit(1);
+    }
 
     // Load Point Cloud Data(*.PLY)
     std::string pc_file = proj_dir + "/dataset/pointcloud/dice_100000.ply";
-    Hologram->loadPointCloud(pc_file.c_str());
+    if (Hologram->loadPointCloud(pc_file.c_str()) < 0) {
+        std::cerr << "Pointcloud file load failed" << std::endl;
+        exit(1);
+    }
 
     // Select CPU or GPU Processing
-    Hologram->setMode(MODE_GPU);
+    // param = MODE_CPU or MODE_GPU
+    Hologram->SetMode(MODE_GPU);
 
     // Select R-S diffraction or Fresnel diffraction
     Hologram->generateHologram(ophPointCloud::PC_DIFF_FLAG::PC_DIFF_RS);
@@ -35,7 +46,10 @@ int main() {
     if (!fs::exists(res_path)) {
         fs::create_directories(res_path);
     }
-    Hologram->saveAsOhc(std::string(res_path + "pc_sample.ohc").c_str());
+    if (!Hologram->saveAsOhc(std::string(res_path + "pc_sample.ohc").c_str())) {
+        std::cerr << "OHC file save failed" << std::endl;
+        exit(1);
+    }
 
     // Encode Complex Field to Real Field
     Hologram->encoding(Hologram->ENCODE_PHASE);
@@ -44,7 +58,10 @@ int main() {
     Hologram->normalize();
 
     // Save to bmp
-    Hologram->save(std::string(res_path + "pc_sample.bmp").c_str());
+    if (!Hologram->save(std::string(res_path + "pc_sample.bmp").c_str())) {
+        std::cerr << "BMP file save failed" << std::endl;
+        exit(1);
+    }
 
     // Release memory used to Generate Point Cloud
     Hologram->release();

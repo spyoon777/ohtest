@@ -31,5 +31,12 @@ message ("openholo dir: ${OPENHOLO_ROOT_DIR}")
 message ("############################################################")
 #
 
+find_package (CUDAToolkit REQUIRED)
+if (NOT CUDAToolkit_FOUND)
+    message (FATAL_ERROR "CUDA Toolkit not found")
+else ()
+    message ("CUDA Toolkit dir: ${CUDAToolkit_LIBRARY_ROOT}")
+endif ()
+
 # Include sub-projects.
 add_subdirectory ("oht")

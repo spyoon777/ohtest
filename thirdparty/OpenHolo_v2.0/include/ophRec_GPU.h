@@ -54,7 +54,7 @@
 #define __CUDA_INTERNAL_COMPILATION__ //for CUDA Math Module
 #include <math_constants.h>
 #include <math_functions.h> //Single Precision Floating
-#include <math_functions_dbl_ptx3.h> //Double Precision Floating
+//#include <math_functions_dbl_ptx3.h> //Double Precision Floating
 #include <vector_functions.h> //Vector Processing Function
 #undef __CUDA_INTERNAL_COMPILATION__
 

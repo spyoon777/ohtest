@@ -20,10 +20,12 @@ target_include_directories (${PROJECT_NAME}
 PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${OPENHOLO_ROOT_DIR}/include"
+    ${CUDAToolkit_INCLUDE_DIRS}
 )
 
 target_link_libraries (${PROJECT_NAME}
     ${OPENHOLO_ROOT_DIR}/lib/libfftw*.lib
+    "${CUDAToolkit_LIBRARY_DIR}/cudart.lib"
 )
 target_link_libraries (${PROJECT_NAME} optimized
     "${OPENHOLO_ROOT_DIR}/lib/openholo.lib"
